@@ -1,0 +1,26 @@
+
+.slide {
+  height: 100vh;
+  width: 100vw;
+}
+
+.slideshow {
+  display: flex;
+  flex-direction: row;
+  transition: transform 0.75s;
+}
+
+.slide img {
+  transition: filter 0.75s;
+}
+
+.d3-component svg {
+  background: #ddd;
+  max-height: 300px;
+}
+
+@media all and (max-width: 1000px) {
+  .d3-component svg {
+    max-height: 200px;
+  }
+}

@@ -1,0 +1,36 @@
+[meta title:"Slideshow" description:"Short description of your project" /]
+
+[var name:"currentSlide" value:0 /]
+[var name:"numSlides" value:0 /]
+
+[var name:"blur" value:5 /]
+
+[Slideshow currentSlide:currentSlide numSlides:numSlides fullWidth:true ]
+
+  [Slide]
+    # Slide 1
+
+    [img fullWidth:true src:"https://picsum.photos/600" style:`{filter: "blur(" + (2 * blur) + "px)"}`/]
+
+    [range value:blur min:0 max:10 /]
+  [/Slide]
+
+  [Slide]
+    # Slide 2
+
+    [img fullWidth:true src:"https://picsum.photos/600?123" style:`{filter: "blur(" + (2 * blur) + "px)"}`/]
+
+    [range value:blur min:0 max:10 /]
+  [/Slide]
+
+  [Slide]
+    # Slide 3
+
+    [img fullWidth:true src:"https://picsum.photos/600?345" style:`{filter: "blur(" + (2 * blur) + "px)"}`/]
+
+    [range value:blur min:0 max:10 /]
+  [/Slide]
+
+[/Slideshow]
+
+

@@ -1,0 +1,27 @@
+{
+  "name": "slideshow",
+  "version": "1.0.0",
+  "license": "MIT",
+  "idyll": {
+    "theme": "default",
+    "layout": "blog",
+    "css": "styles.css",
+    "context": "./context.js",
+    "ssr": false
+  },
+  "scripts": {
+    "recognizer": "GOOGLE_APPLICATION_CREDENTIALS=./google-keys.json node recognizer.js"
+  },
+  "dependencies": {
+    "@google-cloud/speech": "^3.0.0",
+    "d3": "^4.0.0",
+    "idyll": "^4.0.0",
+    "idyll-d3-component": "^2.0.0",
+    "node-record-lpcm16": "^0.3.1",
+    "tween.js": "^16.6.0",
+    "ws": "^7.0.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^0.12.0"
+  }
+}
