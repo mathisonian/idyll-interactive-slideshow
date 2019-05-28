@@ -1,1 +1,1 @@
-# idyll-interactive-slidesho
+# idyll-interactive-slideshow
