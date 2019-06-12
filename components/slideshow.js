@@ -14,6 +14,7 @@ class CustomComponent extends React.Component {
     });
     console.log('mounting');
     document.onkeydown = (e) => {
+
       console.log('keydowning');
       const { currentSlide, tag, children } = this.props;
       const slides = filterChildren(children, (c) => {
@@ -23,6 +24,7 @@ class CustomComponent extends React.Component {
       switch (e.keyCode) {
         case 37:
           if (currentSlide > 0) {
+            e.preventDefault();
             this.props.updateProps({
               currentSlide: currentSlide - 1
             })
@@ -33,6 +35,7 @@ class CustomComponent extends React.Component {
           break;
         case 39:
           if (currentSlide < slides.length - 1) {
+            e.preventDefault();
             this.props.updateProps({
               currentSlide: currentSlide + 1
             })
@@ -56,9 +59,9 @@ class CustomComponent extends React.Component {
   // }
 
   render() {
-    const { hasError, idyll, updateProps, children, currentSlide, ...props } = this.props;
+    const { hasError, idyll, updateProps, children, currentSlide, noTransition, ...props } = this.props;
     return (
-      <div className="slideshow" style={{height: '100vh', background: '#222', color: '#fff', position: 'absolute', transform:`translateX(${-100 * currentSlide}vw)`}}>
+      <div className="slideshow" style={{height: '100vh', background: '#fff', color: '#222', position: 'absolute', transform:`translateX(${-100 * currentSlide}vw)`, transition: noTransition ? 'transform 0s' : null }}>
         {children}
       </div>
     );

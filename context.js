@@ -48,9 +48,65 @@ module.exports = (ctx) => {
     //     }).start();
     // }
 
+    const nextMap = {
+      'vega-lite': 5,
+      'map': 6,
+      'other': 7,
+    }
+
     ws.onmessage = (e) => {
-      console.log('Received ', e.data);
-      const { currentSlide, numSlides, blur } = ctx.data();
+      // console.log('Received ', e.data);
+      try {
+        // console.log(e.data.name)
+        const parsed = JSON.parse(e.data);
+        const { currentSlide, numSlides, blur, zoom } = ctx.data();
+
+        console.log('got dat parse!!', parsed);
+
+        if (parsed.command === 'next') {
+          const { selectedDemo } = ctx.data();
+          console.log('current selected demo', selectedDemo);
+          if (selectedDemo.trim() === '') {
+            if (currentSlide < numSlides - 1) {
+              ctx.update({
+                currentSlide: currentSlide + 1
+              })
+            }
+          } else {
+            console.log('setting current slide to ', nextMap[selectedDemo]);
+            ctx.update({
+              currentSlide: nextMap[selectedDemo],
+              selectedDemo: ''
+            })
+          }
+        }
+        else if (parsed.command === 'previous') {
+          if (currentSlide > 4) {
+            ctx.update({
+              noTransition: true,
+              currentSlide: 4
+            });
+            return;
+          }
+          if (currentSlide > 0) {
+            console.log('decrementing');
+            ctx.update({
+              currentSlide: currentSlide - 1
+            })
+          }
+        }
+        else if (parsed.command === 'show') {
+          ctx.update({
+            lat: parsed.lat,
+            lon: parsed.lon,
+          })
+        }
+
+        return;
+      } catch(e) {
+
+      }
+      const { currentSlide, numSlides, blur, zoom } = ctx.data();
       switch(e.data.toLowerCase().trim()) {
         case 'next':
           if (currentSlide < numSlides - 1) {
@@ -78,6 +134,30 @@ module.exports = (ctx) => {
           // animate('blur', 10);
           ctx.update({
             blur: 10
+          })
+          break;
+        case 'zoom way in':
+          // animate('blur', 10);
+          ctx.update({
+            zoom: 12
+          })
+          break;
+        case 'zoom way out':
+          // animate('blur', 10);
+          ctx.update({
+            zoom: 3
+          })
+          break;
+        case 'zoom in':
+          // animate('blur', 10);
+          ctx.update({
+            zoom: zoom + 1
+          })
+          break;
+        case 'zoom out':
+          // animate('blur', 10);
+          ctx.update({
+            zoom: zoom - 1
           })
           break;
       }

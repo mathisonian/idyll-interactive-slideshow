@@ -2,7 +2,9 @@
 .slide {
   height: 100vh;
   width: 100vw;
+  font-size: 1.5rem;
 }
+
 
 .slideshow {
   display: flex;
@@ -24,3 +26,45 @@
     max-height: 200px;
   }
 }
+
+* {
+  cursor: none;
+  user-select: none !important;
+  -moz-user-select: none;
+  }
+
+  .demo-block {
+
+-moz-user-select: none;
+  }
+
+  .idyll-text-container {
+    max-width: 90% !important;
+
+  }
+
+  .article-header a {
+    color: #222;
+  }
+
+  .demo-block {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 50vh;       /* the same as your div height */
+  }
+
+  .demo {
+    transition: font-size 0.5s;
+  }
+  .demo:hover {
+    font-size: 2em;
+  }
+
+  .article-header {
+    padding-top: 1em;
+    padding-bottom: 0;
+  }
+
+  h1.hed {
+    font-size: 3.5em;
+  }

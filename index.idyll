@@ -5,32 +5,119 @@
 
 [var name:"blur" value:5 /]
 
-[Slideshow currentSlide:currentSlide numSlides:numSlides fullWidth:true ]
+[data name:"stocks" source:"stocks.csv" /]
+[data name:"stocksSpec" source:"vl-stocks.json" /]
+
+[var name:"noTransition" value:false /]
+[var name:"selectedDemo" value:"" /]
+
+[var name:"zoom" value:8 /]
+[var name:"lat" value:47.6062 /]
+[var name:"lon" value:-122.3321 /]
+
+[data name:"cars" source:"cars.json" /]
+[data name:"carsSpec" source:"vl-cars.json" /]
+
+[data name:"countries" source:"countries.json" /]
+[data name:"countriesSpec" source:"vl-countries.json" /]
+
+[var name:"filterValue" value:0.5  /]
+[var name:"selectedDataset" value:"countries"  /]
+
+[var name:"selectedInput" value:"" /]
+
+[var name:"dataFilterMap" value:`{cars: { property: 'Horsepower', domain: [50, 100] }, countries: {property: 'year', domain: [1955, 2000]} }` /]
+
+[derived name:"magnitude" value:`dataFilterMap[selectedDataset].domain[1] - dataFilterMap[selectedDataset].domain[0]` /]
+[derived name:"cleanedFilterValue" value:`filterValue === '' ? '' : Math.round((dataFilterMap[selectedDataset].domain[0] + filterValue * magnitude) / 5) * 5`  /]
+
+[derived name:"cleanedDataset" value:`{cars: cars, countries: countries}[selectedDataset].filter(d => filterValue === '' ? true : (selectedDataset === 'cars' ? d[dataFilterMap[selectedDataset].property] < cleanedFilterValue : +d[dataFilterMap[selectedDataset].property] === cleanedFilterValue))  `  /]
+
+[Slideshow currentSlide:currentSlide numSlides:numSlides fullWidth:true noTransition:noTransition ]
+
 
   [Slide]
-    # Slide 1
-
-    [img fullWidth:true src:"https://picsum.photos/600" style:`{filter: "blur(" + (2 * blur) + "px)"}`/]
-
-    [range value:blur min:0 max:10 /]
+    [Header
+      title:"Dynamic Presentations with Multimodal Input"
+      subtitle:"Prototyping Interactive Systems Spring 2019"
+      author:"Matthew Conlen"
+      fullWidth:true color:"#222" background:"#fff" /]
   [/Slide]
 
   [Slide]
-    # Slide 2
+    ## Project Overview
 
-    [img fullWidth:true src:"https://picsum.photos/600?123" style:`{filter: "blur(" + (2 * blur) + "px)"}`/]
-
-    [range value:blur min:0 max:10 /]
+* Extended Idyll to support authoring interactive slideshows
+* Added support for 3 input devices: _voice_, _gesture_ (via Kinect), and _clicker_
+* Created a server to mediate between input devices and slideshow runtime
   [/Slide]
 
   [Slide]
-    # Slide 3
+    ## Idyll Slides
 
-    [img fullWidth:true src:"https://picsum.photos/600?345" style:`{filter: "blur(" + (2 * blur) + "px)"}`/]
+* Idyll is a markup language for creating dynamic documents
+* Outputs JavaScript so can be combined with many graphics libraries
+* Typically targets essays / articles, but here I've extended to slideshows
 
-    [range value:blur min:0 max:10 /]
+```
+[Slideshow]
+  [Slide]
+    # My Slide Title
+
+    * Bullet point item 1
+    * Bullet point item 2
+
+    [Chart data:myDataset /]
+  [/Slide]
+[/Slideshow]
+```
+  [/Slide]
+
+  [Slide]
+    ## Architecture
+
+    [img fullWidth:true src:"static/images/architecture.png" style:`{maxHeight:'80vh', width: 'auto'}`/]
+  [/Slide]
+
+  [Slide]
+    [Demos currentSlide:currentSlide noTransition:noTransition selectedDemo:selectedDemo /]
+  [/Slide]
+
+  [Slide]
+    [IdyllVegaLite data:stocks spec:stocksSpec /]
+  [/Slide]
+
+  [Slide]
+    [ReactMapGL
+      width:1000
+      height:600
+      latitude:lat
+      longitude:lon
+      zoom:zoom
+      mapStyle:"mapbox://styles/mathisonian/cjurw8owq15tb1fomkfgdvycn"
+      mapboxApiAccessToken:"pk.eyJ1IjoibWF0aGlzb25pYW4iLCJhIjoiY2l5bTA5aWlnMDAwMDN1cGZ6Y3d4dGl6MSJ9.JZaRAfZOZfAnU2EAuybfsg"
+     /]
+   [/Slide]
+
+  [Slide]
+      [IdyllVegaLite data:cleanedDataset spec:`{cars: carsSpec, countries: countriesSpec}[selectedDataset]` /]
+
+      [div style:`{display: 'flex', flexDirection: 'row'}`]
+        [ControlContainer type:"text" value:selectedDataset selectedInput:selectedInput /]
+        [Conditional if:`selectedDataset === 'countries'` ]
+          [ControlContainer type:"range" value:filterValue min:0 max:1 step:0.01 selectedInput:selectedInput  /]
+
+          [Display value:`dataFilterMap[selectedDataset].property`  /]
+          [Display value:cleanedFilterValue format:"d" /]
+        [/Conditionall]
+      [/div]
   [/Slide]
 
 [/Slideshow]
 
+
+// [var name:"x" value:0 /]
+// [var name:"y" value:0 /]
+
+// [SVGOverlay fullWidth:true x:x y:y /]
 
